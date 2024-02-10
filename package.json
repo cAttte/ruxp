@@ -1,0 +1,34 @@
+{
+    "name": "ruxp",
+    "version": "1.0.0",
+    "description": "React components for declarative UXP entry points",
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "scripts": {
+        "build": "tsc"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/cAttte/ruxp.git"
+    },
+    "keywords": [
+        "adobe",
+        "uxp",
+        "react"
+    ],
+    "author": "catte_",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/cAttte/ruxp/issues"
+    },
+    "homepage": "https://github.com/cAttte/ruxp#readme",
+    "devDependencies": {
+        "@types/react": "^18",
+        "@types/react-dom": "^18",
+        "typescript": "^5.3.3",
+        "uxp-types": "^0.1.3"
+    },
+    "peerDependencies": {
+        "react": "^18"
+    }
+}
