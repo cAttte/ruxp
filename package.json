@@ -1,6 +1,6 @@
 {
     "name": "ruxp",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "React components for declarative UXP entry points",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
@@ -29,6 +29,7 @@
         "uxp-types": "^0.1.3"
     },
     "peerDependencies": {
-        "react": "^18"
+        "react": "^18",
+        "react-dom": "^18"
     }
 }
