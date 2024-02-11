@@ -28,8 +28,7 @@ export type ItemProps = ParentItemProps | ChildItemProps | SeparatorProps
 let currentID = 0
 
 /**
- * This component displays a menu item within the parent menu, which can either be a Panel's fly-out menu
- * or another Item's sub-menu; items can be nested.
+ * This component displays a menu item inside of a panel menu, or inside of a sub-menu if it is nested.
  */
 export const Item = (props: ItemProps) => {
     const menu = useContext(MenuContext)

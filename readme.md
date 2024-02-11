@@ -73,6 +73,7 @@ entrypoints.setup({
     }
 })
 
+// (this is a "store")
 const goodness = {
     state: true,
     doGood: () => ((this.state = true), this.update?.()),
@@ -98,13 +99,13 @@ function NicePanel() {
 }
 ```
 
-(At this point, you'd want to use a global state management library). In this case, you don't actually need the `useEffect` because the state lives outside, but it helps to illustrate what it would look like if you needed to derive UXP state from existing React state.
+(At this point, you'd want to use a global state management library). In this case, you don't actually need to `useEffect` because the state lives outside, but it helps to illustrate what it would look like if you needed to derive UXP state from existing React state.
 
-<hr/>
+---
 
 </details>
 
-This not only lets you use the nicer-looking JSX for configuration, but it also makes mutating properties reactively and providing event handlers a breeze through a declarative API, all while sharing a common React root and its corollaries, such as contexts and state.
+This not only lets you use the nicer-looking JSX for configuration, but it also makes mutating properties reactively and providing event handlers a breeze through a declarative API, all while sharing a common React root and its corollaries, such as context and state.
 
 ## Installation
 
@@ -123,7 +124,7 @@ ruxp only exposes a few React components, which you can use to configure and man
 
 ### Plugin
 
-This is the root component that defines your plug-in and should only contain entry point components ([Panel](#Panel) / [Command](#Command)) and root-level mark-up. It should generally be at the top of your component tree.
+This is the root component that defines your plug-in and should only contain entry point components ([Panel](#Panel) or [Command](#Command)) and root-level mark-up. It should generally be at the top of your component tree.
 
 ```tsx
 const MyPlugin = () => (
@@ -141,8 +142,8 @@ const MyPlugin = () => (
 This component registers a panel entry point within your plug-in. It contains everything that should be rendered inside of the panel.
 
 -   **id** `string`: The unique panel identifier, as specified in the manifest file.
--   **children** `ReactNode`: The contents of this panel, plus any menu items.
--   **render** `FunctionComponent`: A function that renders the contents of this panel. Generally, you should pass children directly; this prop is only useful if you want to separate your DOM rendering logic from your menu rendering logic.
+-   **children?** `ReactNode`: The contents of this panel, plus any menu items.
+-   **render?** `FunctionComponent`: A function that renders the contents of this panel. Generally, you should pass children directly; this prop is only useful if you want to separate your DOM rendering logic from your menu rendering logic.
 
 ```tsx
 <Panel id="nicePanel">
@@ -157,14 +158,14 @@ This component registers a panel entry point within your plug-in. It contains ev
 
 ### Item
 
-This component displays a menu item within the parent menu, which can either be a Panel's fly-out menu or another Item's sub-menu; items can be nested.
+This component displays a menu item inside of a panel menu, or inside of a sub-menu if it is nested.
 
 -   **label** `string`: The label this menu item will display.
 -   **checked?** `boolean`: Displays a checkmark next to the menu item.
 -   **disabled?** `boolean`: Displays the item grayed out.
 -   **onInvoke?** `() => void`: A handler to execute when the menu item is invoked.
 
-or, for sub-menu parent items:
+or, for parent items:
 
 -   **label** `string`: The label that this sub-menu will display.
 -   **children** `ReactNode`: The items inside this sub-menu.
@@ -174,17 +175,63 @@ or, for item separators:
 -   **separator** `true`: Marks this item as a separator; a thin horizontal line useful to group items together.
 
 ```tsx
-const MyPanel = () => (
-    <Panel id="myPanel">
-        <Item label="nice item" onInvoke={() => console.log("yea")} />
-        <Item label="nice sub-menu">
-            <Item label="i agree" checked onInvoke={...} />
-            <Item separator />
-            <Item label="i don't" disabled />
-        </Item>
-    </Panel>
-)
+const MyPanel = () => {
+    const [sub, setSub] = useState(false)
+    return (
+        <Panel id="myPanel">
+            <Item label="nice item" onInvoke={() => setSub(!sub)} />
+            {sub && <Item label="nice sub-menu">
+                <Item label="i agree" checked onInvoke={...} />
+                <Item separator />
+                <Item label="i don't" disabled />
+            </Item>}
+        </Panel>
+    )
+}
 ```
+
+> [!NOTE]
+> When reactively mutating menu items in any way, make sure that the entire menu re-renders, so that each item has a chance to re-register in the correct order.
+
+<details>
+
+<summary>For example:</summary>
+
+```tsx
+const MyMenu = () => (
+    <>
+        <Item label="First" />
+        <CheckableItem />
+        <Item label="Last" />
+    </>
+)
+
+const CheckableItem = () => {
+    const [checked, setChecked] = useState(false)
+    return <Item checked={checked} onInvoke={() => setChecked(!checked)} />
+}
+```
+
+Once you click on the middle item, you will see that it gets moved all the way to the bottom. This is because every item re-registers itself in the parent menu _every time_ it renders, so the checkable item un-registers and re-registers, and so gets placed at the end—the items have no way of knowing _where_ they are. Instead, your entire `MyMenu` component should update, so that all of its item children re-register in order:
+
+```tsx
+const MyMenu = () => {
+    const [checked, setChecked] = useState(false)
+    return (
+        <>
+            <Item label="First" />
+            <Item checked={checked} onInvoke={() => setChecked(!checked)} />
+            <Item label="Last" />
+        </>
+    )
+}
+```
+
+This is an annoying limitation, but it is hopefully not that bad because most panel menus and sub-menus are simple enough to be kept in one component. In the future, though, the implementation might change to only re-register when necessary (i.e. when items are added or re-ordered), and mutate in-place elsewhere.
+
+---
+
+</details>
 
 ### Command
 
