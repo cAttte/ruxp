@@ -1,4 +1,4 @@
-import { useCallback, useContext, useEffect, useMemo, useRef, useState } from "react"
+import { ReactNode, useCallback, useContext, useEffect, useRef } from "react"
 import { MenuContext, PanelContext } from "./Panel"
 import { handlers } from "../setup"
 import { NoContextError } from "../errors"
@@ -10,7 +10,7 @@ export type BaseItemProps = {
 }
 export type ParentItemProps = BaseItemProps & {
     /** The items inside this sub-menu. */
-    children?: React.ReactNode
+    children?: ReactNode
 }
 export type ChildItemProps = BaseItemProps & {
     /** Displays a checkmark next to the menu item. */
