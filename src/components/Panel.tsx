@@ -6,6 +6,9 @@ import { panelRoots } from "../setup"
 import { NoContextError } from "../errors"
 import { entrypoints } from "uxp"
 
+let pscore: any = null
+import("photoshop").then(ps => (pscore = ps.core)).catch(() => {})
+
 export type MenuContextValue = { insert: (item: ItemData) => void; remove: (id: string) => void }
 export const MenuContext = createContext<MenuContextValue | null>(null)
 export const PanelContext = createContext<entrypoints.UxpPanelInfo | null>(null)
@@ -17,20 +20,28 @@ export type PanelProps = {
     render?: FunctionComponent
     /** The contents of this panel, plus any menu items. */
     children?: ReactNode
+    /** Displays a [resize gripper](https://developer.adobe.com/photoshop/uxp/2022/ps_reference/media/photoshopcore/#suppressresizegripper) in the bottom-right corner of the panel. Available from Photoshop 23.1. */
+    gripper?: boolean
 }
 
 /**
  * This component registers a panel entry point within your plug-in. It contains everything that
  * should be rendered inside of the panel.
  */
-export const Panel: FunctionComponent<PanelProps> = ({ id, children, render: PanelComponent = () => null }) => {
+export const Panel: FunctionComponent<PanelProps> = ({
+    id,
+    children,
+    gripper = false,
+    render: Children = () => null
+}) => {
     const setup = useContext(PluginContext)
     if (!setup) throw new NoContextError("Panel", id, "Plugin")
     const rootDetectorRef = useRef<HTMLDivElement>(null)
 
     const root = panelRoots.get(id)
-    useEffect(() => void rootDetectorRef.current?.parentNode?.appendChild(root!), [])
     const panel = entrypoints.getPanel(id)
+    useEffect(() => void rootDetectorRef.current?.parentNode?.appendChild(root!), [])
+    useEffect(() => void pscore?.suppressResizeGripper?.({ type: "panel", target: id, value: !gripper }), [gripper])
 
     const menu = entrypoints.getPanel(id).menuItems
     const insertItem = useCallback((item: ItemData) => menu.insertAt(menu.size, item), [])
@@ -40,7 +51,7 @@ export const Panel: FunctionComponent<PanelProps> = ({ id, children, render: Pan
         <PanelContext.Provider value={panel}>
             <MenuContext.Provider value={{ insert: insertItem, remove: removeItem }}>
                 {children}
-                <PanelComponent />
+                <Children />
             </MenuContext.Provider>
         </PanelContext.Provider>
     )
