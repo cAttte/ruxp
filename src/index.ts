@@ -1,4 +1,3 @@
-import "./env"
 export { Command } from "./components/Command"
 export { Item } from "./components/Item"
 export { Panel } from "./components/Panel"
