@@ -1,4 +1,4 @@
-import { FunctionComponent, ReactNode, createContext, useCallback, useContext, useEffect, useRef } from "react"
+import { ComponentType, FunctionComponent, ReactNode, createContext, useContext, useEffect, useRef } from "react"
 import { PluginContext } from "./Plugin"
 import { ItemData } from "./Item"
 import { createPortal } from "react-dom"
@@ -16,8 +16,8 @@ export const PanelContext = createContext<entrypoints.UxpPanelInfo | null>(null)
 export type PanelProps = {
     /** The unique panel identifier, as specified in the manifest file. */
     id: string
-    /** A function that renders the contents of this panel. Generally, you should pass children directly; this prop is only useful if you want to separate your DOM rendering logic from your menu rendering logic. */
-    render?: FunctionComponent
+    /** A component to render inside of this panel. Generally, you should pass children directly; this prop is only useful if you want to separate your DOM rendering logic from your menu rendering logic. */
+    render?: ComponentType
     /** The contents of this panel, plus any menu items. */
     children?: ReactNode
     /** Displays a [resize gripper](https://developer.adobe.com/photoshop/uxp/2022/ps_reference/media/photoshopcore/#suppressresizegripper) in the bottom-right corner of the panel. Available from Photoshop 23.1. */
@@ -44,8 +44,8 @@ export const Panel: FunctionComponent<PanelProps> = ({
     useEffect(() => void pscore?.suppressResizeGripper?.({ type: "panel", target: id, value: !gripper }), [gripper])
 
     const menu = entrypoints.getPanel(id).menuItems
-    const insertItem = useCallback((item: ItemData) => menu.insertAt(menu.size, item), [])
-    const removeItem = useCallback((itemID: string) => menu.getItem(itemID).remove(), [])
+    const insertItem = (item: ItemData) => menu.insertAt(menu.size, item)
+    const removeItem = (itemID: string) => menu.getItem(itemID).remove()
 
     const subtree = (
         <PanelContext.Provider value={panel}>
