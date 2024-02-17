@@ -6,8 +6,8 @@ import { panelRoots } from "../setup"
 import { NoContextError } from "../errors"
 import { entrypoints } from "uxp"
 
-let pscore: any = null
-import("photoshop").then(ps => (pscore = ps.core)).catch(() => {})
+let psCore: any = null
+import("photoshop").then(ps => (psCore = ps.core)).catch(() => {})
 
 export type MenuContextValue = { insert: (item: ItemData) => void; remove: (id: string) => void }
 export const MenuContext = createContext<MenuContextValue | null>(null)
@@ -16,11 +16,11 @@ export const PanelContext = createContext<entrypoints.UxpPanelInfo | null>(null)
 export type PanelProps = {
     /** The unique panel identifier, as specified in the manifest file. */
     id: string
-    /** A component to render inside of this panel. Generally, you should pass children directly; this prop is only useful if you want to separate your DOM rendering logic from your menu rendering logic. */
+    /** A component or function to render inside of this panel. You should generally pass children directly; this prop is only for convenience. */
     render?: ComponentType
     /** The contents of this panel, plus any menu items. */
     children?: ReactNode
-    /** Displays a [resize gripper](https://developer.adobe.com/photoshop/uxp/2022/ps_reference/media/photoshopcore/#suppressresizegripper) in the bottom-right corner of the panel. Available from Photoshop 23.1. */
+    /** **Since Photoshop 23.1**. Displays a [resize gripper](https://developer.adobe.com/photoshop/uxp/2022/ps_reference/media/photoshopcore/#suppressresizegripper) in the bottom-right corner of the panel. */
     gripper?: boolean
 }
 
@@ -41,7 +41,7 @@ export const Panel: FunctionComponent<PanelProps> = ({
     const root = panelRoots.get(id)
     const panel = entrypoints.getPanel(id)
     useEffect(() => void rootDetectorRef.current?.parentNode?.appendChild(root!), [])
-    useEffect(() => void pscore?.suppressResizeGripper?.({ type: "panel", target: id, value: !gripper }), [gripper])
+    useEffect(() => void psCore?.suppressResizeGripper?.({ type: "panel", target: id, value: !gripper }), [gripper])
 
     const menu = entrypoints.getPanel(id).menuItems
     const insertItem = (item: ItemData) => menu.insertAt(menu.size, item)

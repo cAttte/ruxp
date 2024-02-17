@@ -143,8 +143,8 @@ This component registers a panel entry point within your plug-in. It contains ev
 
 -   **id** `string`: The unique panel identifier, as specified in the manifest file.
 -   **children?** `ReactNode`: The contents of this panel, plus any menu items.
--   **render?** `ComponentType`: A component to render inside of this panel. Generally, you should pass children directly; this prop is only useful if you want to separate your DOM rendering logic from your menu rendering logic.
--   **gripper?** `boolean`: Displays a [resize gripper](https://developer.adobe.com/photoshop/uxp/2022/ps_reference/media/photoshopcore/#suppressresizegripper) in the bottom-right corner of the panel. Available from Photoshop 23.1.
+-   **render?** `ComponentType`: A component or function to render inside of this panel. You should generally pass children directly; this prop is only for convenience.
+-   **gripper?** `boolean`: **Since Photoshop 23.1**. Displays a [resize gripper](https://developer.adobe.com/photoshop/uxp/2022/ps_reference/media/photoshopcore/#suppressresizegripper) in the bottom-right corner of the panel.
 
 ```jsx
 <Panel id="nicePanel">
