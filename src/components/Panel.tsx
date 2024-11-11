@@ -6,10 +6,6 @@ import { panelRoots } from "../setup"
 import { NoContextError } from "../errors"
 import { entrypoints, host } from "uxp"
 
-let pscore: any = null
-if (host.name.toLowerCase() == "photoshop") {
-    import("photoshop").then(ps => (pscore = ps.core)).catch(() => {})
-}
 
 export type MenuContextValue = { insert: (item: ItemData) => void; remove: (id: string) => void }
 export const MenuContext = createContext<MenuContextValue | null>(null)
@@ -43,7 +39,7 @@ export const Panel: FunctionComponent<PanelProps> = ({
     const root = panelRoots.get(id)
     const panel = entrypoints.getPanel(id)
     useEffect(() => void rootDetectorRef.current?.parentNode?.appendChild(root!), [])
-    useEffect(() => void pscore?.suppressResizeGripper?.({ type: "panel", target: id, value: !gripper }), [gripper])
+    //useEffect(() => void pscore?.suppressResizeGripper?.({ type: "panel", target: id, value: !gripper }), [gripper])
 
     const menu = entrypoints.getPanel(id).menuItems
     const insertItem = (item: ItemData) => menu.insertAt(menu.size, item)
