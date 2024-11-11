@@ -37,7 +37,7 @@ export const Item = (props: ItemProps) => {
     if (!idRef.current) idRef.current = `__ruxp_auto_${currentID++}__`
     const id = idRef.current
 
-    const { label = "-", children = [], checked = false, disabled = false, onInvoke = () => {} } = { ...props }
+    const { label = "-", children = [], checked = false, disabled = false, onInvoke = () => {} } = { ...props as any}
     if (!menu) throw new NoContextError("Item", null, "Panel/Item")
     if (!panel) throw new NoContextError("Item", null, "Panel")
 
