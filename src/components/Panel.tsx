@@ -4,10 +4,12 @@ import { ItemData } from "./Item"
 import { createPortal } from "react-dom"
 import { panelRoots } from "../setup"
 import { NoContextError } from "../errors"
-import { entrypoints } from "uxp"
+import { entrypoints, host } from "uxp"
 
 let pscore: any = null
-import("photoshop").then(ps => (pscore = ps.core)).catch(() => {})
+if (host.name.toLowerCase() == "photoshop") {
+    import("photoshop").then(ps => (pscore = ps.core)).catch(() => {})
+}
 
 export type MenuContextValue = { insert: (item: ItemData) => void; remove: (id: string) => void }
 export const MenuContext = createContext<MenuContextValue | null>(null)
