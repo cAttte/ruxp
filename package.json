@@ -5,6 +5,7 @@
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
     "scripts": {
+        "prepare": "npm run build",
         "build": "tsc"
     },
     "repository": {
@@ -31,5 +32,6 @@
     "peerDependencies": {
         "react": "^18",
         "react-dom": "^18"
-    }
+    },
+    "files": ["dist"]
 }
