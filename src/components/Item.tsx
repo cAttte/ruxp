@@ -25,6 +25,8 @@ export type SeparatorProps = {
     separator: true
 }
 export type ItemProps = ParentItemProps | ChildItemProps | SeparatorProps
+type AllItemProps = ParentItemProps & ChildItemProps & SeparatorProps
+
 let currentID = 0
 
 /**
@@ -37,7 +39,7 @@ export const Item = (props: ItemProps) => {
     if (!idRef.current) idRef.current = `__ruxp_auto_${currentID++}__`
     const id = idRef.current
 
-    const { label = "-", children = [], checked = false, disabled = false, onInvoke = () => {} } = { ...props }
+    const { label = "-", children = [], checked = false, disabled = false, onInvoke = () => {} } = props as AllItemProps
     if (!menu) throw new NoContextError("Item", null, "Panel/Item")
     if (!panel) throw new NoContextError("Item", null, "Panel")
 
