@@ -6,8 +6,12 @@ import { panelRoots } from "../setup"
 import { NoContextError } from "../errors"
 import { entrypoints } from "uxp"
 
-let psCore: any = null
-import("photoshop").then(ps => (psCore = ps.core)).catch(() => {})
+let psCore: any = (() => {
+    try {
+        // @ts-ignore
+        return require("photoshop").core
+    } catch {}
+})()
 
 export type MenuContextValue = { insert: (item: ItemData) => void; remove: (id: string) => void }
 export const MenuContext = createContext<MenuContextValue | null>(null)
