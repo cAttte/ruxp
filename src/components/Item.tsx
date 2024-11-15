@@ -3,30 +3,6 @@ import { MenuContext, PanelContext } from "./Panel"
 import * as events from "../events"
 import { NoContextError } from "../errors"
 
-export type ItemData = { checked: boolean; enabled: boolean; label: string; id: string; submenu?: ItemData[] }
-export type BaseItemProps = {
-    /** The label this menu item will display. */
-    label: string
-}
-export type ParentItemProps = BaseItemProps & {
-    /** The items inside this sub-menu. */
-    children?: ReactNode
-}
-export type ChildItemProps = BaseItemProps & {
-    /** Displays a checkmark next to the menu item. */
-    checked?: boolean
-    /** Displays the item grayed out. */
-    disabled?: boolean
-    /** A handler to execute when the menu item is invoked. */
-    onInvoke?: () => void
-}
-export type SeparatorProps = {
-    /** Marks this item as a separator; a thin horizontal line useful to group items together. */
-    separator: true
-}
-export type ItemProps = ParentItemProps | ChildItemProps | SeparatorProps
-type AllItemProps = ParentItemProps & ChildItemProps & SeparatorProps
-
 let currentID = 0
 
 /**
@@ -76,3 +52,32 @@ export const Item = (props: ItemProps) => {
         <MenuContext.Provider value={{ insert: insertSubitem, remove: removeSubitem }}>{children}</MenuContext.Provider>
     ) : null
 }
+
+export type ItemData = { checked: boolean; enabled: boolean; label: string; id: string; submenu?: ItemData[] }
+
+export type BaseItemProps = {
+    /** The label this menu item will display. */
+    label: string
+}
+
+export type ParentItemProps = BaseItemProps & {
+    /** The items inside this sub-menu. */
+    children?: ReactNode
+}
+
+export type ChildItemProps = BaseItemProps & {
+    /** Displays a checkmark next to the menu item. */
+    checked?: boolean
+    /** Displays the item grayed out. */
+    disabled?: boolean
+    /** A handler to execute when the menu item is invoked. */
+    onInvoke?: () => void
+}
+
+export type SeparatorProps = {
+    /** Marks this item as a separator; a thin horizontal line useful to group items together. */
+    separator: true
+}
+
+export type ItemProps = ParentItemProps | ChildItemProps | SeparatorProps
+type AllItemProps = ParentItemProps & ChildItemProps & SeparatorProps

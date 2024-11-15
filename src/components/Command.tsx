@@ -1,10 +1,10 @@
-import { FC, memo, useContext, useEffect } from "react"
+import { FunctionComponent, memo, useContext, useEffect } from "react"
 import { PluginContext } from "./Plugin"
 import { NoContextError } from "../errors"
 import * as events from "../events"
 
 /** This component registers a command entry point within the parent plug-in. Its only feature is an event handler. */
-export const Command: FC<{
+export const Command: FunctionComponent<{
     /** The unique command identifier, as specified in the manifest file. */
     id: string
     /** A handler to execute when the command is invoked. */
