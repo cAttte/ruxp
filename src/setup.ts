@@ -1,4 +1,5 @@
 import { entrypoints } from "uxp"
+import { EventEmitter } from "eventemitter3"
 import * as events from "./events"
 
 // UXP bug forces you to call entrypoints.setup() within ~20ms, but mounting takes ~500ms
@@ -18,6 +19,7 @@ export function setup() {
     if (manifest.panels)
         for (const { id } of Object.values(manifest.panels)) {
             createPanelRoot(id)
+            events.panels[id] = new EventEmitter()
             setup.panels![id] = {
                 menuItems: [],
                 // @ts-expect-error: shit typings
@@ -29,6 +31,7 @@ export function setup() {
         }
 
     entrypoints.setup(setup)
+    events.setup()
 }
 
 // UXP must hold a particular DOM node from which to display each panel (the root),

@@ -4,11 +4,15 @@
 import { EventEmitter } from "eventemitter3"
 
 import "./panel/resize"
-import "./panel/visibilityChange"
+import { setup as setupVisibilityChange } from "./panel/visibilityChange"
 
 export const panels: Record<string, PanelEventEmitter> = {}
 export const items = new EventEmitter() as InvokeEventEmitter
 export const commands = new EventEmitter() as InvokeEventEmitter
+
+export const setup = () => {
+    setupVisibilityChange()
+}
 
 export type PanelEventEmitter = EventEmitter<{
     resize: (size: { width: number; height: number }) => void

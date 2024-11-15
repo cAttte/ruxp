@@ -8,13 +8,21 @@ let psAction: any = (() => {
     } catch {}
 })()
 
-// @ts-expect-error: _pluginInfo is internal (but shouldn't be). this prefix is given to the plugin by UXP
-const thisPluginPrefix = `panelid.dynamic.uxp/${entrypoints._pluginInfo.id}/`
+// there is no DOM to attach state to, so we just wing it with this ad-hoc thing. we need state in order to
+// synchronously provide visibility state on start-up (rather than having to wait for the first event to fire,
+// causing a short undefined state for the usePanelVisible() caller).
+const state: Record<string, boolean> = {}
+export const visibilityState = state as Readonly<typeof state>
 
-update()
-document.addEventListener("uxpcommand", ({ commandId: event }: any) => {
-    if (event == "uxphidepanel" || event == "uxpshowpanel") update()
-})
+export function setup() {
+    update()
+    document.addEventListener("uxpcommand", ({ commandId: event }: any) => {
+        if (event == "uxphidepanel" || event == "uxpshowpanel") update()
+    })
+}
+
+// @ts-expect-error: _pluginInfo is internal (but shouldn't be). this prefix is given to the plugin by UXP
+const PLUGIN_PREFIX = `panelid.dynamic.uxp/${entrypoints._pluginInfo.id}/`
 
 function update() {
     const list = psAction?.batchPlay(
@@ -29,8 +37,10 @@ function update() {
     if (!list) return
 
     for (const panel of list) {
-        if (!panel?.ID?.startsWith(thisPluginPrefix)) continue // skip external panels
-        const id = panel.ID!.slice(thisPluginPrefix.length)
+        if (!panel?.ID?.startsWith(PLUGIN_PREFIX)) continue // skip external panels
+        const id = panel.ID!.slice(PLUGIN_PREFIX.length)
+
+        state[id] = panel.visible!
         panels[id].emit("visibilityChange", panel.visible!)
     }
 }
