@@ -40,11 +40,11 @@ export const Panel: FunctionComponent<PanelProps> = ({
 }) => {
     const setup = useContext(PluginContext)
     if (!setup) throw new NoContextError("Panel", id, "Plugin")
-    const rootDetectorRef = useRef<HTMLDivElement>(null)
+    const parentDetectorRef = useRef<HTMLDivElement>(null)
 
     const root = panelRoots.get(id)
     const panel = entrypoints.getPanel(id)
-    useEffect(() => void rootDetectorRef.current?.parentNode?.appendChild(root!), [])
+    useEffect(() => void parentDetectorRef.current?.parentNode?.appendChild(root!), [])
     useEffect(() => void psCore?.suppressResizeGripper?.({ type: "panel", target: id, value: !gripper }), [gripper])
 
     const menu = entrypoints.getPanel(id).menuItems
@@ -62,7 +62,7 @@ export const Panel: FunctionComponent<PanelProps> = ({
 
     return (
         <>
-            <div ref={rootDetectorRef} className="__ruxp_internal__" style={{ display: "none" }} />
+            <div ref={parentDetectorRef} className="__ruxp_internal__" style={{ display: "none !important" }} />
             {root ? createPortal(subtree, root) : subtree}
         </>
     )
