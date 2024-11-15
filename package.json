@@ -31,5 +31,8 @@
     "peerDependencies": {
         "react": "^18",
         "react-dom": "^18"
+    },
+    "dependencies": {
+        "eventemitter3": "^5.0.1"
     }
 }

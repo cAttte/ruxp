@@ -8,7 +8,7 @@ import { entrypoints } from "uxp"
 
 let psCore: any = (() => {
     try {
-        // @ts-ignore
+        // @ts-expect-error
         return require("photoshop").core
     } catch {}
 })()

@@ -1,7 +1,7 @@
 import { FC, memo, useContext, useEffect } from "react"
-import { handlers } from "../setup"
 import { PluginContext } from "./Plugin"
 import { NoContextError } from "../errors"
+import * as events from "../events"
 
 /** This component registers a command entry point within the parent plug-in. Its only feature is an event handler. */
 export const Command: FC<{
@@ -14,8 +14,9 @@ export const Command: FC<{
     if (!setup) throw new NoContextError("Command", id, "Plugin")
 
     useEffect(() => {
-        handlers.commandInvoke.set(id, onInvoke)
-        return () => void handlers.commandInvoke.delete(id)
+        const handler = (cmd: string) => cmd === id && onInvoke()
+        events.commands.on("invoke", handler)
+        return () => void events.commands.off("invoke", handler)
     }, [onInvoke])
 
     return null

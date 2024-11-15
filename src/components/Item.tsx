@@ -1,6 +1,6 @@
 import { ReactNode, useCallback, useContext, useEffect, useRef } from "react"
 import { MenuContext, PanelContext } from "./Panel"
-import { handlers } from "../setup"
+import * as events from "../events"
 import { NoContextError } from "../errors"
 
 export type ItemData = { checked: boolean; enabled: boolean; label: string; id: string; submenu?: ItemData[] }
@@ -67,8 +67,9 @@ export const Item = (props: ItemProps) => {
     // }, [checked, disabled, label])
 
     useEffect(() => {
-        handlers.itemInvoke.set(id, onInvoke)
-        return () => void handlers.itemInvoke.delete(id)
+        const handler = (item: string) => item === id && onInvoke()
+        events.items.on("invoke", handler)
+        return () => void events.items.off("invoke", handler)
     }, [onInvoke])
 
     return children ? (
