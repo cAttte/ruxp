@@ -6,6 +6,13 @@ import * as events from "../events"
 
 /**
  * Get the size of a given panel. If no ID is provided, the parent panel context is used.
+ * @example
+ * ```tsx
+ * const MyPanel = () => {
+ *     const { width, height } = usePanelSize()
+ *     return <p>Size: {width}x{height}</p>
+ * }
+ * ```
  */
 export function usePanelSize(id?: string): { width: number; height: number } {
     const panel = useContext(PanelContext)

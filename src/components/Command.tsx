@@ -3,7 +3,17 @@ import { PluginContext } from "./Plugin"
 import { NoContextError } from "../errors"
 import * as events from "../events"
 
-/** This component registers a command entry point within the parent plug-in. Its only feature is an event handler. */
+/**
+ * This component registers a command entry point within the parent plug-in. Its only feature is the `onInvoke` event handler.
+ * @example
+ * ```tsx
+ * const MyPlugin = () => {
+ *     <Plugin>
+ *         <Command id="do-stuff" onInvoke={() => alert("done!")} />
+ *     </Plugin>
+ * }
+ * ```
+ */
 export const Command: FunctionComponent<{
     /** The unique command identifier, as specified in the manifest file. */
     id: string

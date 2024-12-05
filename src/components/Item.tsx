@@ -7,6 +7,22 @@ let currentID = 0
 
 /**
  * This component displays a menu item inside of a panel menu, or inside of a sub-menu if it is nested.
+ * @example
+ * ```tsx
+ * const MyPanel = () => {
+ *    const [sub, setSub] = useState(false)
+ *    return (
+ *        <Panel id="myPanel">
+ *            <Item label="nice item" onInvoke={() => setSub(!sub)} />
+ *            {sub && <Item label="nice sub-menu">
+ *                <Item label="i agree" checked onInvoke={...} />
+ *                <Item separator />
+ *                <Item label="i don't" disabled />
+ *            </Item>}
+ *        </Panel>
+ *    )
+ * }
+ * ```
  */
 export const Item = (props: ItemProps) => {
     const menu = useContext(MenuContext)
