@@ -23,6 +23,40 @@ let currentID = 0
  *    )
  * }
  * ```
+ *
+ * **Note:** when reactively mutating menu items in any way, make sure that the entire menu re-renders, so that each item has a chance to re-register in the correct order. For example:
+ *
+ * ```jsx
+ * const MyMenu = () => (
+ *     <>
+ *         <Item label="First" />
+ *         <CheckableItem />
+ *         <Item label="Last" />
+ *     </>
+ * )
+ *
+ * const CheckableItem = () => {
+ *     const [checked, setChecked] = useState(false)
+ *     return <Item checked={checked} onInvoke={() => setChecked(!checked)} />
+ * }
+ * ```
+ *
+ * Once you click on the middle item, you will see that it gets moved all the way to the bottom. This is because every item re-registers itself in the parent menu _every time_ it renders, so the checkable item un-registers and re-registers, and so gets placed at the end—the items have no way of knowing _where_ they are. Instead, your entire `MyMenu` component should update, so that all of its item children re-register in order:
+ *
+ * ```jsx
+ * const MyMenu = () => {
+ *     const [checked, setChecked] = useState(false)
+ *     return (
+ *         <>
+ *             <Item label="First" />
+ *             <Item checked={checked} onInvoke={() => setChecked(!checked)} />
+ *             <Item label="Last" />
+ *         </>
+ *     )
+ * }
+ * ```
+ *
+ * This is an annoying limitation, but it is hopefully not that bad because most panel menus and sub-menus are simple enough to be kept in one component. In the future, though, the implementation might change to only re-register when necessary (i.e. when items are added or re-ordered), and mutate in-place elsewhere.
  */
 export const Item = (props: ItemProps) => {
     const menu = useContext(MenuContext)
