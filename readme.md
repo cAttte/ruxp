@@ -134,6 +134,17 @@ It also exposes a few React hooks, which are useful for inspecting UXP state.
 This is the root component that defines your plug-in and should only contain entry point components
 (Panel or Command) and root-level mark-up. It should generally be at the top of your component tree.
 
+```tsx
+const MyPlugin = () => (
+    <Plugin>
+        <div className="h-full text-[white]">
+            <Panel {...} />
+        </div>
+        <Command {...} />
+    </Plugin>
+)
+```
+
 ### Panel
 
 This component registers a panel entry point within your plug-in. It contains everything that
@@ -245,7 +256,11 @@ Get the size of a given panel. If no ID is provided, the parent panel context is
 ```tsx
 const MyPanel = () => {
     const { width, height } = usePanelSize()
-    return <p>Size: {width}x{height}</p>
+    return (
+        <p>
+            Size: {width}x{height}
+        </p>
+    )
 }
 ```
 
@@ -256,13 +271,10 @@ const MyPanel = () => {
 ```tsx
 const MyPanel = () => {
     const visible = usePanelVisible()
-    return (
-        <div>
-            {visible ? <MyExpensiveComponent /> : <MyCheapPlaceholder />}
-        </div>
-    )
+    return <div>{visible ? <MyExpensiveComponent /> : <MyCheapPlaceholder />}</div>
 }
 ```
+
 <!-- #endregion -->
 
 ## License
