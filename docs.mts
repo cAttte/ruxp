@@ -55,7 +55,7 @@ ${output.trim()}`
 const renderParamOrProperty = (thing: typedoc.ParameterReflection | typedoc.DeclarationReflection) => {
     const name = thing.name + (thing.flags.isOptional ? "?" : "")
     const desc = flattenMarkdown(thing.comment?.summary)
-    const type = (thing.type! as typedoc.ReferenceType | typedoc.IntrinsicType).name
+    const type = thing.type!.stringify(typedoc.TypeContext.mappedParameter)
     return `-   **${name}** \`${type}\`${desc ? ": " + desc : ""}`
 }
 

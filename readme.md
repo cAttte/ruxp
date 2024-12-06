@@ -162,7 +162,7 @@ This component displays a menu item inside of a panel menu, or inside of a sub-m
 -   **checked?** `boolean`: Displays a checkmark next to the menu item.
 -   **disabled?** `boolean`: Displays the item grayed out.
 -   **label** `string`: The label this menu item will display.
--   **onInvoke?** `undefined`: A handler to execute when the menu item is invoked.
+-   **onInvoke?** `() => void`: A handler to execute when the menu item is invoked.
 
 or, for parent items:
 
@@ -171,7 +171,7 @@ or, for parent items:
 
 or, for separators:
 
--   **separator** `undefined`: Marks this item as a separator; a thin horizontal line useful to group items together.
+-   **separator** `true`: Marks this item as a separator; a thin horizontal line useful to group items together.
 
 ```tsx
 const MyPanel = () => {
@@ -228,7 +228,7 @@ This is an annoying limitation, but it is hopefully not that bad because most pa
 This component registers a command entry point within the parent plug-in. Its only feature is the `onInvoke` event handler.
 
 -   **id** `string`: The unique command identifier, as specified in the manifest file.
--   **onInvoke** `undefined`: A handler to execute when the command is invoked.
+-   **onInvoke** `() => void`: A handler to execute when the command is invoked.
 
 ```tsx
 const MyPlugin = () => (
