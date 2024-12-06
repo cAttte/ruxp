@@ -113,7 +113,9 @@ This not only lets you use the nicer-looking JSX for configuration, but it also 
 npm i ruxp
 ```
 
-## Usage
+## Documentation
+
+<!-- #region doc-gen -->
 
 ruxp only exposes a few React components, which you can use to configure and manage your plug-in.
 
@@ -122,38 +124,34 @@ ruxp only exposes a few React components, which you can use to configure and man
 -   [Item](#Item)
 -   [Command](#Command)
 
+It also exposes a few React hooks, which are useful for inspecting UXP state.
+
+-   [usePanelSize](#usePanelSize)
+-   [usePanelVisible](#usePanelVisible)
+
 ### Plugin
 
-This is the root component that defines your plug-in and should only contain entry point components ([Panel](#Panel) or [Command](#Command)) and root-level mark-up. It should generally be at the top of your component tree.
-
-```jsx
-const MyPlugin = () => (
-    <Plugin>
-        <div className="h-full text-[white]">
-            <Panel {...} />
-        </div>
-        <Command {...} />
-    </Plugin>
-)
-```
+This is the root component that defines your plug-in and should only contain entry point components
+(Panel or Command) and root-level mark-up. It should generally be at the top of your component tree.
 
 ### Panel
 
-This component registers a panel entry point within your plug-in. It contains everything that should be rendered inside of the panel.
+This component registers a panel entry point within your plug-in. It contains everything that
+should be rendered inside of the panel.
 
--   **id** `string`: The unique panel identifier, as specified in the manifest file.
 -   **children?** `ReactNode`: The contents of this panel, plus any menu items.
+-   **gripper?** `boolean`: **Photoshop ≥23.1 only**. Displays a [resize gripper](https://developer.adobe.com/photoshop/uxp/2022/ps_reference/media/photoshopcore/#suppressresizegripper) in the bottom-right corner of the panel.
+-   **id** `string`: The unique panel identifier, as specified in the manifest file.
 -   **render?** `ComponentType`: A component or function to render inside of this panel. You should generally pass children directly; this prop is only for convenience.
--   **gripper?** `boolean`: **Since Photoshop 23.1**. Displays a [resize gripper](https://developer.adobe.com/photoshop/uxp/2022/ps_reference/media/photoshopcore/#suppressresizegripper) in the bottom-right corner of the panel.
 
-```jsx
+```tsx
 <Panel id="nicePanel">
     <Item label="hey" />
     <p>this is a nice panel for sure</p>
 </Panel>
 ```
 
-```jsx
+```tsx
 <Panel id="myPanel" render={MyPanel} />
 ```
 
@@ -161,42 +159,37 @@ This component registers a panel entry point within your plug-in. It contains ev
 
 This component displays a menu item inside of a panel menu, or inside of a sub-menu if it is nested.
 
--   **label** `string`: The label this menu item will display.
 -   **checked?** `boolean`: Displays a checkmark next to the menu item.
 -   **disabled?** `boolean`: Displays the item grayed out.
--   **onInvoke?** `() => void`: A handler to execute when the menu item is invoked.
+-   **label** `string`: The label this menu item will display.
+-   **onInvoke?** `undefined`: A handler to execute when the menu item is invoked.
 
 or, for parent items:
 
--   **label** `string`: The label that this sub-menu will display.
--   **children** `ReactNode`: The items inside this sub-menu.
+-   **children?** `ReactNode`: The items inside this sub-menu.
+-   **label** `string`: The label this sub-menu will display.
 
-or, for item separators:
+or, for separators:
 
--   **separator** `true`: Marks this item as a separator; a thin horizontal line useful to group items together.
+-   **separator** `undefined`: Marks this item as a separator; a thin horizontal line useful to group items together.
 
-```jsx
+```tsx
 const MyPanel = () => {
-    const [sub, setSub] = useState(false)
-    return (
-        <Panel id="myPanel">
-            <Item label="nice item" onInvoke={() => setSub(!sub)} />
-            {sub && <Item label="nice sub-menu">
-                <Item label="i agree" checked onInvoke={...} />
-                <Item separator />
-                <Item label="i don't" disabled />
-            </Item>}
-        </Panel>
-    )
+   const [sub, setSub] = useState(false)
+   return (
+       <Panel id="myPanel">
+           <Item label="nice item" onInvoke={() => setSub(!sub)} />
+           {sub && <Item label="nice sub-menu">
+               <Item label="i agree" checked onInvoke={...} />
+               <Item separator />
+               <Item label="i don't" disabled />
+           </Item>}
+       </Panel>
+   )
 }
 ```
 
-> [!NOTE]
-> When reactively mutating menu items in any way, make sure that the entire menu re-renders, so that each item has a chance to re-register in the correct order.
-
-<details>
-
-<summary>For example:</summary>
+**Note:** when reactively mutating menu items in any way, make sure that the entire menu re-renders, so that each item has a chance to re-register in the correct order. For example:
 
 ```jsx
 const MyMenu = () => (
@@ -230,20 +223,47 @@ const MyMenu = () => {
 
 This is an annoying limitation, but it is hopefully not that bad because most panel menus and sub-menus are simple enough to be kept in one component. In the future, though, the implementation might change to only re-register when necessary (i.e. when items are added or re-ordered), and mutate in-place elsewhere.
 
----
-
-</details>
-
 ### Command
 
-This component registers a command entry point within the parent plug-in. Its only feature is an event handler.
+This component registers a command entry point within the parent plug-in. Its only feature is the `onInvoke` event handler.
 
 -   **id** `string`: The unique command identifier, as specified in the manifest file.
--   **onInvoke** `() => void`: A handler to execute when the command is invoked.
+-   **onInvoke** `undefined`: A handler to execute when the command is invoked.
 
-```jsx
-<Command id="myCommand" onInvoke={() => console.log("my command invoked!")} />
+```tsx
+const MyPlugin = () => (
+    <Plugin>
+        <Command id="do-stuff" onInvoke={() => alert("done!")} />
+    </Plugin>
+)
 ```
+
+### usePanelSize
+
+Get the size of a given panel. If no ID is provided, the parent panel context is used.
+
+```tsx
+const MyPanel = () => {
+    const { width, height } = usePanelSize()
+    return <p>Size: {width}x{height}</p>
+}
+```
+
+### usePanelVisible
+
+**Photoshop only.** Get the visibility state of a given panel. If no ID is provided, the parent panel context is used.
+
+```tsx
+const MyPanel = () => {
+    const visible = usePanelVisible()
+    return (
+        <div>
+            {visible ? <MyExpensiveComponent /> : <MyCheapPlaceholder />}
+        </div>
+    )
+}
+```
+<!-- #endregion -->
 
 ## License
 
