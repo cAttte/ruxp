@@ -7,19 +7,14 @@ import * as events from "../events"
  * This component registers a command entry point within the parent plug-in. Its only feature is the `onInvoke` event handler.
  * @example
  * ```tsx
- * const MyPlugin = () => {
+ * const MyPlugin = () => (
  *     <Plugin>
  *         <Command id="do-stuff" onInvoke={() => alert("done!")} />
  *     </Plugin>
- * }
+ * )
  * ```
  */
-export const Command: FunctionComponent<{
-    /** The unique command identifier, as specified in the manifest file. */
-    id: string
-    /** A handler to execute when the command is invoked. */
-    onInvoke: () => void
-}> = memo(({ id, onInvoke }) => {
+export const Command: FunctionComponent<CommandProps> = memo(({ id, onInvoke }) => {
     const setup = useContext(PluginContext)
     if (!setup) throw new NoContextError("Command", id, "Plugin")
 
@@ -31,3 +26,10 @@ export const Command: FunctionComponent<{
 
     return null
 })
+
+export type CommandProps = {
+    /** The unique command identifier, as specified in the manifest file. */
+    id: string
+    /** A handler to execute when the command is invoked. */
+    onInvoke: () => void
+}

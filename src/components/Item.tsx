@@ -71,17 +71,16 @@ export const Item = (props: ItemProps) => {
 
 export type ItemData = { checked: boolean; enabled: boolean; label: string; id: string; submenu?: ItemData[] }
 
-export type BaseItemProps = {
-    /** The label this menu item will display. */
+export type ParentItemProps = {
+    /** The label this sub-menu will display. */
     label: string
-}
-
-export type ParentItemProps = BaseItemProps & {
     /** The items inside this sub-menu. */
     children?: ReactNode
 }
 
-export type ChildItemProps = BaseItemProps & {
+export type ChildItemProps = {
+    /** The label this menu item will display. */
+    label: string
     /** Displays a checkmark next to the menu item. */
     checked?: boolean
     /** Displays the item grayed out. */
@@ -95,5 +94,5 @@ export type SeparatorProps = {
     separator: true
 }
 
-export type ItemProps = ParentItemProps | ChildItemProps | SeparatorProps
-type AllItemProps = ParentItemProps & ChildItemProps & SeparatorProps
+export type ItemProps = ChildItemProps | ParentItemProps | SeparatorProps
+type AllItemProps = ChildItemProps & ParentItemProps & SeparatorProps

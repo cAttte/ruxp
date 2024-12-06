@@ -3,7 +3,6 @@ import { entrypoints } from "uxp"
 
 let psAction: any = (() => {
     try {
-        // @ts-expect-error
         return require("photoshop").action
     } catch {}
 })()

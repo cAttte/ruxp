@@ -5,8 +5,19 @@ import { visibilityState } from "../events/panel/visibilityChange"
 import * as events from "../events"
 
 /**
- * **Photoshop only**. Get the visibility state of a given panel. If no ID is provided, the parent panel context is used.
+ * **Photoshop only.** Get the visibility state of a given panel. If no ID is provided, the parent panel context is used.
  * @returns undefined when outside of Photoshop.
+ * @example
+ * ```tsx
+ * const MyPanel = () => {
+ *     const visible = usePanelVisible()
+ *     return (
+ *         <div>
+ *             {visible ? <MyExpensiveComponent /> : null}
+ *         </div>
+ *     )
+ * }
+ * ```
  */
 export function usePanelVisible(id?: string): boolean | undefined {
     const panel = useContext(PanelContext)

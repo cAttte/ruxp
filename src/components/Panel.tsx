@@ -8,7 +8,6 @@ import { entrypoints } from "uxp"
 
 let psCore: any = (() => {
     try {
-        // @ts-expect-error
         return require("photoshop").core
     } catch {}
 })()
@@ -20,6 +19,18 @@ export const PanelContext = createContext<entrypoints.UxpPanelInfo | null>(null)
 /**
  * This component registers a panel entry point within your plug-in. It contains everything that
  * should be rendered inside of the panel.
+ *
+ * @example
+ * ```tsx
+ * <Panel id="nicePanel">
+ *     <Item label="hey" />
+ *     <p>this is a nice panel for sure</p>
+ * </Panel>
+ * ```
+ * @example
+ * ```tsx
+ * <Panel id="myPanel" render={MyPanel} />
+ * ```
  */
 export const Panel: FunctionComponent<PanelProps> = ({
     id,
@@ -64,6 +75,6 @@ export type PanelProps = {
     render?: ComponentType
     /** The contents of this panel, plus any menu items. */
     children?: ReactNode
-    /** **Since Photoshop 23.1**. Displays a [resize gripper](https://developer.adobe.com/photoshop/uxp/2022/ps_reference/media/photoshopcore/#suppressresizegripper) in the bottom-right corner of the panel. */
+    /** **Photoshop ≥23.1 only**. Displays a [resize gripper](https://developer.adobe.com/photoshop/uxp/2022/ps_reference/media/photoshopcore/#suppressresizegripper) in the bottom-right corner of the panel. */
     gripper?: boolean
 }
