@@ -13,7 +13,7 @@ import * as events from "../events"
  *     const visible = usePanelVisible()
  *     return (
  *         <div>
- *             {visible ? <MyExpensiveComponent /> : null}
+ *             {visible ? <MyExpensiveComponent /> : <MyCheapPlaceholder />}
  *         </div>
  *     )
  * }
