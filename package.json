@@ -1,6 +1,6 @@
 {
     "name": "ruxp",
-    "version": "1.1.2",
+    "version": "1.2.0",
     "description": "React components for declarative UXP entry points",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
