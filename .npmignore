@@ -1,3 +1,5 @@
 .gitattributes
+.prettierrc.json
 tsconfig.json
+docs.mts
 src/
