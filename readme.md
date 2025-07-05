@@ -14,15 +14,15 @@ const MyPlugin = () => {
 
     return (
         <Plugin>
-            <Panel id="nicePanel">
+            <Panel id="nice-panel">
                 <NicePanel good={good} />
                 <Item label="Do something...">
                     <Item label="...good" checked={good} onInvoke={doGood} />
                     <Item label="...bad" checked={!good} onInvoke={doBad} />
                 </Item>
             </Panel>
-            <Command id="doGood" onInvoke={doGood} />
-            <Command id="doBad" onInvoke={doBad} />
+            <Command id="do-good" onInvoke={doGood} />
+            <Command id="do-bad" onInvoke={doBad} />
         </Plugin>
     )
 }
@@ -43,23 +43,23 @@ import { useState, useEffect, useSyncExternalStore } from "react"
 
 entrypoints.setup({
     panels: {
-        nicePanel: {
+        "nice-panel": {
             create(root) {
                 createRoot(root).render(<NicePanel />)
             },
             menuItems: [
                 {
-                    id: "doSomething",
+                    id: "do-something",
                     label: "Do something...",
                     submenu: [
-                        { id: "doSomethingGood", label: "...good", checked: true },
-                        { id: "doSomethingBad", label: "...bad" }
+                        { id: "do-something-good", label: "...good", checked: true },
+                        { id: "do-something-bad", label: "...bad" }
                     ]
                 }
             ],
             invokeMenu(id) {
-                if (id == "doSomethingGood") goodness.doGood()
-                else if (id == "doSomethingBad") goodness.doBad()
+                if (id == "do-something-good") goodness.doGood()
+                else if (id == "do-something-bad") goodness.doBad()
             }
         }
     },
@@ -90,9 +90,9 @@ function NicePanel() {
     )
 
     useEffect(() => {
-        const getItem = id => entrypoints.getPanel("nicePanel").menuItems.getItem(id)
-        getItem("doSomethingGood").checked = good
-        getItem("doSomethingBad").checked = !good
+        const getItem = id => entrypoints.getPanel("nice-panel").menuItems.getItem(id)
+        getItem("do-something-good").checked = good
+        getItem("do-something-bad").checked = !good
     }, [good])
 
     return <p>i'm {good ? "good" : "bad"}</p>
