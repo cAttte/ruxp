@@ -61,7 +61,7 @@ let currentID = 0
 export const Item = (props: ItemProps) => {
     const menu = useContext(MenuContext)
     const panel = useContext(PanelContext)
-    const idRef = useRef<string>()
+    const idRef = useRef<string>(undefined)
     if (!idRef.current) idRef.current = `__ruxp_auto_${currentID++}__`
     const id = idRef.current
 
