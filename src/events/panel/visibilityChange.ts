@@ -20,7 +20,8 @@ export function setup() {
     })
 }
 
-// @ts-expect-error: _pluginInfo is internal (but shouldn't be). this prefix is given to the plugin by UXP
+// this prefix is given to the plugin by UXP.
+// @ts-expect-error: _pluginInfo is internal (but shouldn't be)
 const PLUGIN_PREFIX = `panelid.dynamic.uxp/${entrypoints._pluginInfo.id}/`
 
 function update() {

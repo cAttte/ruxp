@@ -1,5 +1,5 @@
-// The other event dispatchers ({items, commands}.invoke) are implemented up in ../setup.
-// But panel event dispatchers are implemented here (in ./panel/) because they're more complicated.
+// the other event dispatchers ({items, commands}.invoke) are implemented up in ../setup,
+// but panel event dispatchers are implemented here (in ./panel/) because they're more complicated.
 
 import { EventEmitter } from "eventemitter3"
 

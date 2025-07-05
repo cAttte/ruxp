@@ -4,7 +4,8 @@ import { NoContextError } from "../errors"
 import * as events from "../events"
 
 /**
- * This component registers a command entry point within the parent plug-in. Its only feature is the `onInvoke` event handler.
+ * This component registers a command entry point within the parent plug-in.
+ * Its only feature is the `onInvoke` event handler.
  * @example
  * ```tsx
  * const MyPlugin = () => (
