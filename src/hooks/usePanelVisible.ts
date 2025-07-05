@@ -11,11 +11,7 @@ import * as events from "../events"
  * ```tsx
  * const MyPanel = () => {
  *     const visible = usePanelVisible()
- *     return (
- *         <div>
- *             {visible ? <MyExpensiveComponent /> : <MyCheapPlaceholder />}
- *         </div>
- *     )
+ *     return <div>{visible ? <MyExpensiveComponent /> : <MyCheapPlaceholder />}</div>
  * }
  * ```
  */
