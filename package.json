@@ -7,7 +7,8 @@
     "scripts": {
         "build": "tsc",
         "docs": "tsx docs.mts",
-        "prepare": "npm run build && npm run docs"
+        "format": "prettier --write .",
+        "prepare": "npm run build && npm run docs && npm run format"
     },
     "repository": {
         "type": "git",

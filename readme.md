@@ -119,15 +119,15 @@ npm i ruxp
 
 ruxp only exposes a few React components, which you can use to configure and manage your plug-in.
 
--   [Plugin](#Plugin)
--   [Panel](#Panel)
--   [Item](#Item)
--   [Command](#Command)
+- [Plugin](#Plugin)
+- [Panel](#Panel)
+- [Item](#Item)
+- [Command](#Command)
 
 It also exposes a few React hooks, which are useful for inspecting UXP state.
 
--   [usePanelSize](#usePanelSize)
--   [usePanelVisible](#usePanelVisible)
+- [usePanelSize](#usePanelSize)
+- [usePanelVisible](#usePanelVisible)
 
 ### Plugin
 
@@ -150,10 +150,10 @@ const MyPlugin = () => (
 This component registers a panel entry point within your plug-in. It contains everything that
 should be rendered inside of the panel.
 
--   **children?** `ReactNode`: The contents of this panel, plus any menu items.
--   **gripper?** `boolean`: **Photoshop ≥23.1 only**. Displays a [resize gripper](https://developer.adobe.com/photoshop/uxp/2022/ps_reference/media/photoshopcore/#suppressresizegripper) in the bottom-right corner of the panel.
--   **id** `string`: The unique panel identifier, as specified in the manifest file.
--   **render?** `ComponentType`: A component or function to render inside of this panel. You should generally pass children directly; this prop is only for convenience.
+- **children?** `ReactNode`: The contents of this panel, plus any menu items.
+- **gripper?** `boolean`: **Photoshop ≥23.1 only**. Displays a [resize gripper](https://developer.adobe.com/photoshop/uxp/2022/ps_reference/media/photoshopcore/#suppressresizegripper) in the bottom-right corner of the panel.
+- **id** `string`: The unique panel identifier, as specified in the manifest file.
+- **render?** `ComponentType`: A component or function to render inside of this panel. You should generally pass children directly; this prop is only for convenience.
 
 ```tsx
 <Panel id="nicePanel">
@@ -170,19 +170,19 @@ should be rendered inside of the panel.
 
 This component displays a menu item inside of a panel menu, or inside of a sub-menu if it is nested.
 
--   **checked?** `boolean`: Displays a checkmark next to the menu item.
--   **disabled?** `boolean`: Displays the item grayed out.
--   **label** `string`: The label this menu item will display.
--   **onInvoke?** `() => void`: A handler to execute when the menu item is invoked.
+- **checked?** `boolean`: Displays a checkmark next to the menu item.
+- **disabled?** `boolean`: Displays the item grayed out.
+- **label** `string`: The label this menu item will display.
+- **onInvoke?** `() => void`: A handler to execute when the menu item is invoked.
 
 or, for parent items:
 
--   **children?** `ReactNode`: The items inside this sub-menu.
--   **label** `string`: The label this sub-menu will display.
+- **children?** `ReactNode`: The items inside this sub-menu.
+- **label** `string`: The label this sub-menu will display.
 
 or, for separators:
 
--   **separator** `true`: Marks this item as a separator; a thin horizontal line useful to group items together.
+- **separator** `true`: Marks this item as a separator; a thin horizontal line useful to group items together.
 
 ```tsx
 const MyPanel = () => {
@@ -238,8 +238,8 @@ This is an annoying limitation, but it is hopefully not that bad because most pa
 
 This component registers a command entry point within the parent plug-in. Its only feature is the `onInvoke` event handler.
 
--   **id** `string`: The unique command identifier, as specified in the manifest file.
--   **onInvoke** `() => void`: A handler to execute when the command is invoked.
+- **id** `string`: The unique command identifier, as specified in the manifest file.
+- **onInvoke** `() => void`: A handler to execute when the command is invoked.
 
 ```tsx
 const MyPlugin = () => (
