@@ -6,7 +6,8 @@
     "types": "dist/index.d.ts",
     "scripts": {
         "build": "tsc",
-        "docs": "tsx docs.mts"
+        "docs": "tsx docs.mts",
+        "prepare": "npm run build && npm run docs"
     },
     "repository": {
         "type": "git",
